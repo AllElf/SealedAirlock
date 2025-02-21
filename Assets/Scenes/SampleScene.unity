@@ -16559,6 +16559,7 @@ MonoBehaviour:
   _leftDoorClose: 0
   _rightDoorClose: 0
   _disinfection: 0
+  _disinfectionParticlePlay: 0
   _doorLeftAnimatorClipClose: LeftGetwayClose
   _doorLeftAnimatorClipOpen: LeftGetway
   _doorRightAnimatorClipClose: RightGetwayClose

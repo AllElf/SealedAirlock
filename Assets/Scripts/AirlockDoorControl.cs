@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class AirlockDoorControl : MonoBehaviour
@@ -11,6 +12,7 @@ public class AirlockDoorControl : MonoBehaviour
     [SerializeField] bool _leftDoorClose;
     [SerializeField] bool _rightDoorClose;
     [SerializeField] bool _disinfection;
+    [SerializeField] bool _disinfectionParticlePlay;
     [SerializeField] string _doorLeftAnimatorClipClose = "LeftGetwayClose";
     [SerializeField] string _doorLeftAnimatorClipOpen = "LeftGetway";
     [SerializeField] string _doorRightAnimatorClipClose = "RightGetwayClose";
@@ -36,11 +38,11 @@ public class AirlockDoorControl : MonoBehaviour
         stateInfoLeft = _animatorLeftController.GetCurrentAnimatorStateInfo(0);
         stateInfoRight = _animatorRighttController.GetCurrentAnimatorStateInfo(0);
 
-        if (stateInfoLeft.normalizedTime >= 1.0f && stateInfoRight.normalizedTime >= 1.0f && _rightDoorClose == true && Input.GetKeyUp(KeyCode.Alpha1))
+        if (stateInfoLeft.normalizedTime >= 1.0f && stateInfoRight.normalizedTime >= 1.0f && !_disinfectionParticlePlay && _rightDoorClose == true && Input.GetKeyUp(KeyCode.Alpha1))
         {
             AnimationLeftDoor();
         }
-        if (stateInfoRight.normalizedTime >= 1.0f && stateInfoLeft.normalizedTime >= 1.0f && _leftDoorClose == true && Input.GetKeyUp(KeyCode.Alpha3))
+        if (stateInfoRight.normalizedTime >= 1.0f && stateInfoLeft.normalizedTime >= 1.0f && !_disinfectionParticlePlay && _leftDoorClose == true && Input.GetKeyUp(KeyCode.Alpha3))
         {
             AnimationRightDoor();
         }
@@ -94,6 +96,7 @@ public class AirlockDoorControl : MonoBehaviour
                     if (!_disinfectionParticle[i].isPlaying)
                     {
                         _disinfectionParticle[i].Play();
+                        _disinfectionParticlePlay = true;
                         if (spiderAnimatorSwitch != null)
                         {
                             spiderAnimatorSwitch.Dead();
@@ -102,6 +105,7 @@ public class AirlockDoorControl : MonoBehaviour
                     else if (_disinfectionParticle[i].isPlaying)
                     {
                         _disinfectionParticle[i].Stop();
+                        _disinfectionParticlePlay = false;
                         if (spiderAnimatorSwitch != null)
                         {
                             spiderAnimatorSwitch.Idle();
@@ -125,14 +129,14 @@ public class AirlockDoorControl : MonoBehaviour
 
     public void ButtonOne()
     {
-        if (stateInfoLeft.normalizedTime >= 1.0f && stateInfoRight.normalizedTime >= 1.0f && _rightDoorClose == true)
+        if (stateInfoLeft.normalizedTime >= 1.0f && stateInfoRight.normalizedTime >= 1.0f && _rightDoorClose == true && !_disinfectionParticlePlay)
         {
             AnimationLeftDoor();
         }
     }
     public void ButtonTwo()
     {
-        if (stateInfoRight.normalizedTime >= 1.0f && stateInfoLeft.normalizedTime >= 1.0f && _leftDoorClose == true)
+        if (stateInfoRight.normalizedTime >= 1.0f && stateInfoLeft.normalizedTime >= 1.0f && _leftDoorClose == true && !_disinfectionParticlePlay)
         {
             AnimationRightDoor();
         }
@@ -143,26 +147,56 @@ public class AirlockDoorControl : MonoBehaviour
         {
             if (stateInfoLeft.normalizedTime >= 1.0f && stateInfoRight.normalizedTime >= 1.0f)
             {
-                for (int i = 0; i < _disinfectionParticle.Length; i++)
-                {
-                    if (!_disinfectionParticle[i].isPlaying)
-                    {
-                        _disinfectionParticle[i].Play();
-                        if (spiderAnimatorSwitch != null)
-                        {
-                            spiderAnimatorSwitch.Dead();
-                        }
-                    }
-                    else if (_disinfectionParticle[i].isPlaying)
-                    {
-                        _disinfectionParticle[i].Stop();
-                        if (spiderAnimatorSwitch != null)
-                        {
-                            spiderAnimatorSwitch.Idle();
-                        }
-                    }
-                }
+                StartCoroutine(DisinfectionPlatCoroutine());
             }
         }
+    }
+
+    IEnumerator DisinfectionPlatCoroutine()
+    {
+        if (!_disinfectionParticle[0].isPlaying && !_disinfectionParticle[1].isPlaying)
+        {
+            _disinfectionParticlePlay = true;
+            yield return new WaitForSeconds(2f);
+            _disinfectionParticle[0].Play();
+            _disinfectionParticle[1].Play();
+            if (spiderAnimatorSwitch != null)
+            {
+                spiderAnimatorSwitch.Dead();
+            }
+
+        }
+        else if(_disinfectionParticle[0].isPlaying && _disinfectionParticle[1].isPlaying)
+        {
+            _disinfectionParticle[0].Stop();
+            _disinfectionParticle[1].Stop();
+            yield return new WaitForSeconds(2f);
+            _disinfectionParticlePlay = false;
+            if (spiderAnimatorSwitch != null)
+            {
+                spiderAnimatorSwitch.Idle();
+            }
+        }
+        //for (int i = 0; i < _disinfectionParticle.Length; i++)
+        //{
+        //    if (!_disinfectionParticle[i].isPlaying)
+        //    {
+        //        _disinfectionParticle[i].Play();
+        //        _disinfectionParticlePlay = true;
+        //        if (spiderAnimatorSwitch != null)
+        //        {
+        //            spiderAnimatorSwitch.Dead();
+        //        }
+        //    }
+        //    else if (_disinfectionParticle[i].isPlaying)
+        //    {
+        //        _disinfectionParticle[i].Stop();
+        //        _disinfectionParticlePlay = false;
+        //        if (spiderAnimatorSwitch != null)
+        //        {
+        //            spiderAnimatorSwitch.Idle();
+        //        }
+        //    }
+        //}
     }
 }
