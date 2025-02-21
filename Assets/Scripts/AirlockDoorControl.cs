@@ -36,11 +36,11 @@ public class AirlockDoorControl : MonoBehaviour
         stateInfoLeft = _animatorLeftController.GetCurrentAnimatorStateInfo(0);
         stateInfoRight = _animatorRighttController.GetCurrentAnimatorStateInfo(0);
 
-        if (stateInfoLeft.normalizedTime >= 1.0f && Input.GetKeyUp(KeyCode.Alpha1))
+        if (stateInfoLeft.normalizedTime >= 1.0f && stateInfoRight.normalizedTime >= 1.0f && _rightDoorClose == true && Input.GetKeyUp(KeyCode.Alpha1))
         {
             AnimationLeftDoor();
         }
-        if (stateInfoRight.normalizedTime >= 1.0f && Input.GetKeyUp(KeyCode.Alpha2))
+        if (stateInfoRight.normalizedTime >= 1.0f && stateInfoLeft.normalizedTime >= 1.0f && _leftDoorClose == true && Input.GetKeyUp(KeyCode.Alpha3))
         {
             AnimationRightDoor();
         }
@@ -87,7 +87,7 @@ public class AirlockDoorControl : MonoBehaviour
     {
         if (_leftDoorClose == true && _rightDoorClose == true && _disinfection == true)
         {
-            if(stateInfoLeft.normalizedTime >= 1.0f && stateInfoRight.normalizedTime >= 1.0f && Input.GetKeyUp(KeyCode.Alpha3))
+            if(stateInfoLeft.normalizedTime >= 1.0f && stateInfoRight.normalizedTime >= 1.0f && Input.GetKeyUp(KeyCode.Alpha2))
             {
                 for (int i = 0; i < _disinfectionParticle.Length; i++)
                 {
@@ -125,14 +125,14 @@ public class AirlockDoorControl : MonoBehaviour
 
     public void ButtonOne()
     {
-        if (stateInfoLeft.normalizedTime >= 1.0f)
+        if (stateInfoLeft.normalizedTime >= 1.0f && stateInfoRight.normalizedTime >= 1.0f && _rightDoorClose == true)
         {
             AnimationLeftDoor();
         }
     }
     public void ButtonTwo()
     {
-        if (stateInfoRight.normalizedTime >= 1.0f)
+        if (stateInfoRight.normalizedTime >= 1.0f && stateInfoLeft.normalizedTime >= 1.0f && _leftDoorClose == true)
         {
             AnimationRightDoor();
         }
