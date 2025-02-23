@@ -23137,6 +23137,7 @@ MonoBehaviour:
   _energyReturnColor: {r: 1, g: 0.95686275, b: 0.8392157, a: 0}
   _emergencyColor: {r: 0.78039217, g: 0.58431375, b: 0.047058824, a: 0}
   airlockDoorControl: {fileID: 0}
+  _oxigen: {fileID: 0}
 --- !u!114 &1914578524
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27939,7 +27940,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 1, g: 1, b: 1, a: 1}
+      maxColor: {r: 1, g: 0.9153769, b: 0, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
