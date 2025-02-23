@@ -8,6 +8,34 @@ TagManager:
   - ButtonRightAirlock
   - ButtonDisinfection
   - InstructionButton
+  - LeftDoorSound
+  - RighrDoorSound
+  - ZummerSound
+  - ZummerSoundStop
+  - ZunnerSound
+  - ButtonEmergency
+  - TheSwitch
+  - FlapDoor
+  - TheElectron
+  - Valve(Right)
+  - Valve(Left)
+  - TheFlashingLight
+  - HintsText
+  - ZUMMER
+  - Insect
+  - Hermetic lock
+  - BoxFlapDoor
+  - Fallout
+  - Fallout2
+  - MainMenu
+  - mainSound
+  - OpenFlapDoor
+  - Lever
+  - PowerIncreased
+  - PowerDropped
+  - Direction
+  - Emergency
+  - Oxigen
   layers:
   - Default
   - TransparentFX

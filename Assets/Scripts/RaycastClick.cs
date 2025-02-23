@@ -3,16 +3,18 @@ using UnityEngine;
 public class RaycastClick : MonoBehaviour
 {
     [SerializeField] float _rayDistans = 2f;
-    [SerializeField]Ray _raycast;
+    [SerializeField] Ray _raycast;
     public RaycastHit _raycastHit;
-    [SerializeField] bool _enabled = false;
     [SerializeField] AirlockDoorControl _airlockDoorControl;
-    [SerializeField] string nameTag;
+    [SerializeField] SoundsController _soundsController;
+    [SerializeField] ManualDoorOpening manualDoorOpening;
+   
+    public string nameTag;
 
     void Update()
     {
         Ray();
-        if(Input.GetKeyUp(KeyCode.Mouse0))
+        if (Input.GetKeyUp(KeyCode.Mouse0))
         {
             Click();
         }
@@ -21,34 +23,87 @@ public class RaycastClick : MonoBehaviour
     void Ray()
     {
         _raycast = new Ray(transform.position, transform.forward * _rayDistans);
-        
+
         if (Physics.Raycast(_raycast, out _raycastHit))
         {
-            _enabled = true;
             nameTag = _raycastHit.collider.tag.ToString();
             Debug.DrawRay(transform.position, transform.forward * _rayDistans, Color.green);
         }
         else
         {
-            _enabled = false;
+            nameTag = "Empty";
             Debug.DrawRay(transform.position, transform.forward * _rayDistans, Color.red);
         }
-        
+
     }
 
     private void Click()
     {
-        if(_raycastHit.collider.tag == "ButtonLeftAirlock")
+        if (nameTag == "ButtonLeftAirlock")
         {
-            _airlockDoorControl.ButtonOne();
+            _airlockDoorControl.ButtonLeftDoor();
         }
-        if (_raycastHit.collider.tag == "ButtonRightAirlock")
+        if (nameTag == "Valve(Left)")
         {
-            _airlockDoorControl.ButtonTwo();
+            manualDoorOpening.VavleLeft();
         }
-        if (_raycastHit.collider.tag == "ButtonDisinfection")
+        if (nameTag == "Valve(Right)")
         {
-            _airlockDoorControl.ButtonThree();
+            manualDoorOpening.VavleRight();
+        }
+        if (nameTag == "ButtonRightAirlock")
+        {
+            _airlockDoorControl.ButtonRightDoor();
+        }
+        if (nameTag == "ButtonDisinfection")
+        {
+            _airlockDoorControl.ButtonDisinfection();
+        }
+        if (nameTag == "ButtonEmergency")
+        {
+            _airlockDoorControl.ButtonEmergency();
+        }
+        if (nameTag == "ButtonLeftAirlock" ||
+            nameTag == "ButtonDisinfection" ||
+            nameTag == "ButtonRightAirlock" &&
+            _airlockDoorControl.stateInfoRight.normalizedTime < 1.0f)
+        {
+            if (_airlockDoorControl._leftDoorClose == true &&
+                _airlockDoorControl._rightDoorClose == false)
+            {
+                _soundsController.ZummerStop();
+            }
+        }
+        if (nameTag == "ButtonRightAirlock" ||
+            nameTag == "ButtonDisinfection" ||
+            nameTag == "ButtonLeftAirlock" &&
+            _airlockDoorControl.stateInfoLeft.normalizedTime < 1.0f)
+        {
+            if (_airlockDoorControl._leftDoorClose == false &&
+                _airlockDoorControl._rightDoorClose == true)
+            {
+                _soundsController.ZummerStop();
+            }
+        }
+        if (nameTag == "ButtonRightAirlock" &&
+            _airlockDoorControl.stateInfoLeft.normalizedTime < 1.0f ||
+            nameTag == "ButtonRightAirlock" &&
+            _airlockDoorControl.stateInfoRight.normalizedTime < 1.0f ||
+            nameTag == "ButtonDisinfection" &&
+            _airlockDoorControl.stateInfoLeft.normalizedTime < 1.0f ||
+            nameTag == "ButtonDisinfection" &&
+            _airlockDoorControl.stateInfoRight.normalizedTime < 1.0f ||
+            nameTag == "ButtonLeftAirlock" &&
+            _airlockDoorControl.stateInfoRight.normalizedTime < 1.0f ||
+            nameTag == "ButtonLeftAirlock" &&
+            _airlockDoorControl.stateInfoLeft.normalizedTime < 1.0f ||
+            nameTag == "ButtonLeftAirlock" && _airlockDoorControl._emergency == true ||
+            nameTag == "ButtonRightAirlock" && _airlockDoorControl._emergency == true ||
+            nameTag == "ButtonDisinfection" && _airlockDoorControl._emergency == true)
+        {
+
+            _soundsController.ZummerStop();
+
         }
     }
 
