@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class RaycastClick : MonoBehaviour
 {
-    [SerializeField] float _rayDistans = 2f;
+    public float _rayDistans = 2f;
     [SerializeField] Ray _raycast;
     public RaycastHit _raycastHit;
     [SerializeField] AirlockDoorControl _airlockDoorControl;

@@ -12,12 +12,14 @@ public class ElectricityController : MonoBehaviour
     public float spawnRate = 2f;  // Время между спавнами
     public float moveSpeed = 5f;  // Скорость движения объектов
     [SerializeField] float _speedCurrent;
+    [SerializeField] GameObject _panelBlock;
     [SerializeField] AirlockDoorControl airlockDoorControl;
 
 
     void Start()
     {
         StartCoroutine(SpawnObjects());
+        _panelBlock.SetActive(false);
     }
 
     IEnumerator SpawnObjects()
@@ -29,10 +31,12 @@ public class ElectricityController : MonoBehaviour
             {
                 moveSpeed = _speedCurrent;
                 SpawnObject();
+                _panelBlock.SetActive(false);
             }
             else if (electricSwitch._enabledElectrick == false)
             {
                 moveSpeed = 0f;
+                _panelBlock.SetActive(true);
                 airlockDoorControl._disinfectionParticle[0].Stop();
                 airlockDoorControl._disinfectionParticle[1].Stop();
             }

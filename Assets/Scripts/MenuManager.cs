@@ -4,14 +4,17 @@ using UnityEngine.UI;
 
 public class MenuManager : MonoBehaviour
 {
+    [SerializeField] RaycastClick raycastClick;
     public bool _pause;
     public bool _music;
     [SerializeField] string _nameScene;
     [SerializeField] GameObject _panelPause;
     [SerializeField] GraphicRaycaster _graphicRaycaster;
     public AudioSource[] audioSources;
+
     void Awake()
     {
+        raycastClick  = GameObject.FindObjectOfType<RaycastClick>();
         audioSources = GameObject.FindObjectsOfType<AudioSource>();
         _pause = false;
         _music = true;
@@ -26,7 +29,11 @@ public class MenuManager : MonoBehaviour
             Pause();
         }  
     }
-
+    public void paiseButton()
+    {
+        _pause = !_pause;
+        Pause();
+    }
     public void PauseButton()
     {
         
@@ -75,10 +82,11 @@ public class MenuManager : MonoBehaviour
                 }
         }
     }
-    void Pause()
+    public void Pause()
     {
         if (_pause == true)
         {
+            raycastClick._rayDistans = 0.0f;
             _panelPause.SetActive(true);
             _graphicRaycaster.enabled = true;
             if(audioSources != null)
@@ -99,6 +107,7 @@ public class MenuManager : MonoBehaviour
             _panelPause.SetActive(false);
             _graphicRaycaster.enabled = false;
             Time.timeScale = 1.0f;
+            raycastClick._rayDistans = 20.0f;
             if (audioSources != null)
             {
                 for (int i = 0; i < audioSources.Length; i++)

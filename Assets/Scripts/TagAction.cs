@@ -11,12 +11,14 @@ public class ElectricSwitch : MonoBehaviour
     public bool _enabledElectrick;
     [SerializeField] bool _enableflapDoor;
     [SerializeField] ManualDoorOpening manualDoorOpening;
+    [SerializeField] AirlockDoorControl airlockDoorControl;
 
     private void Start()
     {
         _enableflapDoor = false;
         _enabledElectrick = true;
         raycastClick = GameObject.FindObjectOfType<RaycastClick>();
+        airlockDoorControl = GameObject.FindObjectOfType<AirlockDoorControl>();
 
     }
     private void Update()
@@ -37,7 +39,10 @@ public class ElectricSwitch : MonoBehaviour
     {
         if(_tagName == "TheSwitch")
         {
-            if (_stateInfoAnimator.normalizedTime >= 1.0 && Input.GetKeyUp(KeyCode.Mouse0) && manualDoorOpening._switchLeft == false && manualDoorOpening._switchRight == false)
+            if (_stateInfoAnimator.normalizedTime >= 1.0 && 
+                Input.GetKeyUp(KeyCode.Mouse0) && manualDoorOpening._switchLeft == false && 
+                manualDoorOpening._switchRight == false && airlockDoorControl.stateInfoLeft.normalizedTime >= 1.0f &&
+                airlockDoorControl.stateInfoRight.normalizedTime >= 1.0f)
             {
                 _enabledElectrick = !_enabledElectrick;
                 if (_enabledElectrick == true)

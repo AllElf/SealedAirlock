@@ -14,6 +14,7 @@ public class Hints : MonoBehaviour
     [SerializeField] Light Light;
     [SerializeField] Color _energyDeclineColor, _energyReturnColor, _emergencyColor;
     [SerializeField] AirlockDoorControl airlockDoorControl;
+    [SerializeField] ManualDoorOpening manualDoorOpening;
     [SerializeField] ParticleSystem _oxigen;
     void Start()
     {
@@ -26,10 +27,11 @@ public class Hints : MonoBehaviour
         Light = GameObject.FindGameObjectWithTag("Direction").GetComponent<Light>();
         airlockDoorControl = GameObject.FindObjectOfType<AirlockDoorControl>();
         _oxigen = GameObject.FindGameObjectWithTag("Oxigen").GetComponent <ParticleSystem>();
+        _oxigen.Stop();
+        manualDoorOpening = GameObject.FindObjectOfType<ManualDoorOpening>();
     }
     void Update()
     {
-        _oxigen.Pause();
         _hintTeg = raycastClick.nameTag;
         HintsFunction();
     }
@@ -51,7 +53,7 @@ public class Hints : MonoBehaviour
         else if (_hintTeg == "ButtonEmergency")
         {
             _hints.text = "Аварийная кнопка";
-            if (Input.GetKeyUp(KeyCode.Mouse0) && airlockDoorControl._emergencytText.text == "Аварийная блокировка гермо-шлюза активна")
+            if (Input.GetKeyUp(KeyCode.Mouse0) && electricityController.moveSpeed !=0 && airlockDoorControl._emergencytText.text == "Аварийная блокировка гермо-шлюза активна")
             {
                 for (int i = 0; i < audioSources.Length; i++)
                 {
@@ -63,7 +65,7 @@ public class Hints : MonoBehaviour
                     }
                 }
             }
-            else if (Input.GetKeyUp(KeyCode.Mouse0) && airlockDoorControl._emergencytText.text != "Аварийная блокировка гермо-шлюза активна")
+            else if (Input.GetKeyUp(KeyCode.Mouse0) && electricityController.moveSpeed != 0 && airlockDoorControl._emergencytText.text != "Аварийная блокировка гермо-шлюза активна")
             {
                 for (int i = 0; i < audioSources.Length; i++)
                 {
@@ -107,7 +109,7 @@ public class Hints : MonoBehaviour
         else if (_hintTeg == "TheSwitch")
         {
             _hints.text = "Переключатель электричества";
-            if (Input.GetKeyUp(KeyCode.Mouse0))
+            if (Input.GetKeyUp(KeyCode.Mouse0) )
             {
                 for (int i = 0; i < audioSources.Length; i++)
                 {
@@ -115,15 +117,22 @@ public class Hints : MonoBehaviour
                     {
                         audioSources[i].Play();  
                     }
-                    if (electricityController.moveSpeed == 0 && audioSources[i].tag == "PowerIncreased")
+                    if (electricityController.moveSpeed == 0 && audioSources[i].tag == "PowerIncreased" 
+                        && manualDoorOpening._switchLeft == false && manualDoorOpening._switchRight == false && 
+                        airlockDoorControl.stateInfoRight.normalizedTime >= 1.0f && 
+                        airlockDoorControl.stateInfoLeft.normalizedTime >= 1.0f)
                     {
                         audioSources[i].Play();
                         Light.color = _energyReturnColor;  
                     }
-                    else if (electricityController.moveSpeed != 0 && audioSources[i].tag == "PowerDropped")
+                    else if (electricityController.moveSpeed != 0 && audioSources[i].tag == "PowerDropped" &&
+                        airlockDoorControl.stateInfoRight.normalizedTime >= 1.0f &&
+                        airlockDoorControl.stateInfoLeft.normalizedTime >= 1.0f)
                     {
                         audioSources[i].Play();
                         Light.color = _energyDeclineColor;
+                        airlockDoorControl._emergency = false;
+                        airlockDoorControl.AnimatorTrue();
                     }
                 }
             }
@@ -146,11 +155,11 @@ public class Hints : MonoBehaviour
         }
         else if (_hintTeg == "MainMenu")
         {
-            _hints.text = "Главное меню";
+            _hints.text = "VOULT-TEC";
         }
         else if (_hintTeg == "Fallout")
         {
-            _hints.text = "Нажми сюда если всё\n работает";
+            _hints.text = "Нажми сюда если\n работает";
             if(Input.GetKeyDown(KeyCode.Mouse0))
             {
                 uIManager.PlusPointlike();

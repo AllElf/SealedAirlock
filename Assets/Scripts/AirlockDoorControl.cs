@@ -10,7 +10,7 @@ public class AirlockDoorControl : MonoBehaviour
     public Animator _animatorRighttController;
     public AnimatorStateInfo stateInfoRight;
     public ParticleSystem[] _disinfectionParticle;
-    [SerializeField] SpiderAnimatorSwitch spiderAnimatorSwitch;
+    public SpiderAnimatorSwitch spiderAnimatorSwitch;
     [SerializeField] ElectricityController electricityController;
     public bool _emergency;
     public bool _leftDoorClose;
@@ -147,7 +147,7 @@ public class AirlockDoorControl : MonoBehaviour
     }
     public void ButtonEmergency()
     {
-        if(stateInfoRight.normalizedTime >= 1.0f && stateInfoLeft.normalizedTime >= 1.0f)
+        if(stateInfoRight.normalizedTime >= 1.0f && stateInfoLeft.normalizedTime >= 1.0f && electricityController.moveSpeed !=0)
         {
             _emergency = !_emergency;
             if (_emergency == true && _leftDoorClose == false)
@@ -182,12 +182,14 @@ public class AirlockDoorControl : MonoBehaviour
         AnimationLeftDoor();
         yield return new WaitForSeconds(4.5f);
         AnimatorFals();
+        yield break;
     }
     IEnumerator AnimFalsRight()
     {
         AnimationRightDoor();
         yield return new WaitForSeconds(4.5f);
         AnimatorFals();
+        yield break;
     }
     void AnimatorFals()
     {
@@ -197,7 +199,7 @@ public class AirlockDoorControl : MonoBehaviour
         _animatorRighttController.enabled = false;
         spiderAnimatorSwitch.Dead();
     }
-    void AnimatorTrue()
+    public void AnimatorTrue()
     {
         _animatorLeftController.enabled = true;
         _animatorRighttController.enabled = true;
@@ -205,15 +207,20 @@ public class AirlockDoorControl : MonoBehaviour
     }
     void TextInfo()
     {
-        if (_emergency == true)
+        if (_emergency == true && electricityController.moveSpeed != 0)
         {
             _emergencytText.color = Color.red;
             _emergencytText.text = "Аварийная блокировка гермо-шлюза активна";
         }
-        else if (_emergency == false)
+        else if (_emergency == false && electricityController.moveSpeed != 0)
         {
             _emergencytText.color = Color.green;
             _emergencytText.text = "Аварийная блокировка гермо-шлюза неактивна";
+        }
+        else if(electricityController.moveSpeed == 0)
+        {
+            _emergencytText.color = Color.red;
+            _emergencytText.text = "Отсутствует электричество"; 
         }
     }
 }

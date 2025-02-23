@@ -36,6 +36,8 @@ TagManager:
   - Direction
   - Emergency
   - Oxigen
+  - BlockPanel
+  - MainMenuBloked
   layers:
   - Default
   - TransparentFX
