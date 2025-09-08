@@ -1,0 +1,77 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - ButtonLeftAirlock
+  - ButtonRightAirlock
+  - ButtonDisinfection
+  - InstructionButton
+  - LeftDoorSound
+  - RighrDoorSound
+  - ZummerSound
+  - ZummerSoundStop
+  - ZunnerSound
+  - ButtonEmergency
+  - TheSwitch
+  - FlapDoor
+  - TheElectron
+  - Valve(Right)
+  - Valve(Left)
+  - TheFlashingLight
+  - HintsText
+  - ZUMMER
+  - Insect
+  - Hermetic lock
+  - BoxFlapDoor
+  - Fallout
+  - Fallout2
+  - MainMenu
+  - mainSound
+  - OpenFlapDoor
+  - Lever
+  - PowerIncreased
+  - PowerDropped
+  - Direction
+  - Emergency
+  - Oxigen
+  - BlockPanel
+  - MainMenuBloked
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
